@@ -1,10 +1,8 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
-
 // Создаем экземпляр axios
 const api = axios.create({
-  baseURL: API_URL,  // Изменяем baseURL
+  baseURL: 'http://localhost:8000/api',  // Изменяем baseURL
   headers: {
     'Content-Type': 'application/json',
   },
@@ -36,7 +34,7 @@ api.interceptors.response.use(
 
 export const completeRental = async (rentalId, data) => {
   try {
-    const response = await axios.post(`${API_URL}/rentals/${rentalId}/complete`, data);
+    const response = await axios.post(`/api/rentals/${rentalId}/complete`, data);
     return response.data;
   } catch (error) {
     console.error('Ошибка при завершении аренды:', error);
@@ -106,7 +104,7 @@ export const userService = {
     return api.get('/rentals/');
   },
   completeRental: (rentalId, data) => {
-    return api.post(`${API_URL}/rentals/${rentalId}/complete`, data);
+    return api.post(`/api/rentals/${rentalId}/complete`, data);
   },
   returnCar: async (rentalId, data) => {
     try {

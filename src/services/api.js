@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Создаем экземпляр axios
 const api = axios.create({
-  baseURL: 'http://localhost:8000/api',  // Изменяем baseURL
+  baseURL: process.env.REACT_APP_API_URL || 'https://rentalbackend-x86y.onrender.com/api',  // Используем URL развернутого API
   headers: {
     'Content-Type': 'application/json',
   },

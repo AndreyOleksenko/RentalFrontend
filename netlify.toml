@@ -3,10 +3,12 @@
   publish = "build"
 
 [build.environment]
-  REACT_APP_API_URL = "https://rentalbackend-x86y.onrender.com/api"
   NODE_VERSION = "18.17.0"
   NPM_VERSION = "9.6.7"
   CI = "false"
+
+[context.production.environment]
+  REACT_APP_API_URL = "https://web-production-da0b.up.railway.app/api"
 
 [[redirects]]
   from = "/*"

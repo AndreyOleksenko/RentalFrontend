@@ -67,6 +67,8 @@ export const carService = {
     api.patch(`/cars/${carId}/status/`, data),
   updateCar: (carId, data) => 
     api.patch(`/cars/${carId}/`, data),
+  deleteCar: (carId) => 
+    api.delete(`/cars/${carId}/`),
   requestMaintenance: (carId) => 
     api.post(`/cars/${carId}/maintenance/`, {}),
   getRentalsHistory: () => 

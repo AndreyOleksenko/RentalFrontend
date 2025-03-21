@@ -25,7 +25,8 @@ import {
   Edit as EditIcon,
   DirectionsCar as CarIcon,
   Build as BuildIcon,
-  Warning as WarningIcon
+  Warning as WarningIcon,
+  Delete as DeleteIcon
 } from '@mui/icons-material';
 import { carService } from '../../services/api';
 
@@ -35,6 +36,8 @@ const Fleet = () => {
   const [filter, setFilter] = useState('all');
   const [editMode, setEditMode] = useState(false);
   const [editedCar, setEditedCar] = useState(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [carToDelete, setCarToDelete] = useState(null);
 
   useEffect(() => {
     fetchCars();
@@ -85,6 +88,17 @@ const Fleet = () => {
       fetchCars();
     } catch (error) {
       console.error('Failed to request maintenance:', error);
+    }
+  };
+
+  const handleDeleteCar = async () => {
+    try {
+      await carService.deleteCar(carToDelete.id);
+      fetchCars();
+      setDeleteDialogOpen(false);
+      setCarToDelete(null);
+    } catch (error) {
+      console.error('Failed to delete car:', error);
     }
   };
 
@@ -193,6 +207,17 @@ const Fleet = () => {
                       <WarningIcon color="error" />
                     </Tooltip>
                   )}
+                  <Tooltip title="Удалить автомобиль">
+                    <IconButton 
+                      onClick={() => {
+                        setCarToDelete(car);
+                        setDeleteDialogOpen(true);
+                      }}
+                      color="error"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
                 </TableCell>
               </TableRow>
             ))}
@@ -285,6 +310,41 @@ const Fleet = () => {
             onClick={handleSaveChanges}
           >
             Сохранить
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => {
+          setDeleteDialogOpen(false);
+          setCarToDelete(null);
+        }}
+      >
+        <DialogTitle>Подтверждение удаления</DialogTitle>
+        <DialogContent>
+          {carToDelete && (
+            <Typography>
+              Вы действительно хотите удалить автомобиль {carToDelete.brand} {carToDelete.model}?
+              Это действие нельзя будет отменить.
+            </Typography>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button 
+            onClick={() => {
+              setDeleteDialogOpen(false);
+              setCarToDelete(null);
+            }}
+          >
+            Отмена
+          </Button>
+          <Button 
+            onClick={handleDeleteCar}
+            color="error"
+            variant="contained"
+          >
+            Удалить
           </Button>
         </DialogActions>
       </Dialog>
